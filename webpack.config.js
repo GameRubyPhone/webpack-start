@@ -1,19 +1,35 @@
-module.exports = {
-	entry: {
-		app: ["webpack/hot/dev-server", "./src/app.js"],
-	},
-	output: {
-		path: './public/dist',
-		filename: 'bundle.js'
-	},
-	module: {
-	  loaders: [
-			{ test: /\.jsx?$/, exclude: /(node_modules|bower_components)/, loader: 'babel' },
-			{ test: /\.css$/, loader: 'style-loader!css-loader' },
-			{ test: /\.eot(\?v=\d+\.\d+\.\d+)?$/, loader: "file" },
-			{ test: /\.(woff|woff2)$/, loader:"url?prefix=font/&limit=5000" },
-			{ test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/, loader: "url?limit=10000&mimetype=application/octet-stream" },
-			{ test: /\.svg(\?v=\d+\.\d+\.\d+)?$/, loader: "url?limit=10000&mimetype=image/svg+xml" }
-	  ]
-	}
+const path = require('path');
+
+// eslint-disable-next-line import/no-extraneous-dependencies
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+
+// eslint-disable-next-line import/no-extraneous-dependencies
+const autoprefixer = require('autoprefixer');
+
+const SCSS_LOADER = {
+  test: /\.scss$/,
+  loader: ExtractTextPlugin.extract('style', 'css!postcss!sass'),
 };
+
+const JS_LOADER = {
+	test : /\.jsx?$/,
+	loaders : ['react-hot', 'babel'],
+	include: path.join(__dirname, 'src'),
+	exclude: /node_modules/
+};
+
+const config = {
+  entry: {
+    javascript: path.join(__dirname, 'src', 'app'),
+  },
+  output: {
+    path: path.join(__dirname, './public/dist'),
+    filename: path.join('js', 'cheatsheet', '[name].js'),
+  },
+  module: {
+    loaders: [SCSS_LOADER, JS_LOADER],
+  },
+  postcss: [autoprefixer({ browsers: ['ie >= 9', 'last 2 versions'] })]
+};
+
+module.exports = config;

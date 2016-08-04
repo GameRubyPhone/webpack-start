@@ -1,5 +1,6 @@
 #webpack-bootstrap-react
 Importing Bootstrap's CSS with Webpack.
+Import React, babel.
 
 ##Instructions
 
